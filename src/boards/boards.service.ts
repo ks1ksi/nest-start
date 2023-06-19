@@ -3,13 +3,20 @@ import { BoardRepository } from './board.repository';
 import { Board } from './board.entity';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardStatus } from './board-status.enum';
+import { User } from '../auth/user.entity';
 
 @Injectable()
 export class BoardsService {
   constructor(private boardRepository: BoardRepository) {}
 
-  getAllBoards(): Promise<Board[]> {
-    return this.boardRepository.find();
+  getAllBoards(user: User): Promise<Board[]> {
+    return this.boardRepository.find({
+      where: {
+        user: {
+          id: user.id,
+        },
+      },
+    });
   }
 
   async getBoardById(id: number): Promise<Board> {
@@ -20,8 +27,8 @@ export class BoardsService {
     return board;
   }
 
-  createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
-    return this.boardRepository.createBoard(createBoardDto);
+  createBoard(createBoardDto: CreateBoardDto, user: User): Promise<Board> {
+    return this.boardRepository.createBoard(createBoardDto, user);
   }
 
   deleteBoard(id: number): Promise<void> {
