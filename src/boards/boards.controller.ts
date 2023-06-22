@@ -25,6 +25,7 @@ import { User } from '../auth/user.entity';
 @UseGuards(AuthGuard())
 export class BoardsController {
   private logger = new Logger('BoardsController');
+
   constructor(private boardsService: BoardsService) {}
 
   @Get()
